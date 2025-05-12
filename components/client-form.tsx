@@ -38,13 +38,18 @@ export function ClientForm() {
     },
   })
 
+  // Update the onSubmit function to handle async operations properly
   async function onSubmit(data: ClientFormValues) {
     try {
-      await createClient(data)
-      router.push("/clients")
-      router.refresh()
+      const result = await createClient(data)
+      if (result.success) {
+        router.push("/clients")
+        router.refresh()
+      } else {
+        console.error("Failed to create client:", result.error)
+      }
     } catch (error) {
-      console.error("Failed to create client:", error)
+      console.error("Error creating client:", error)
     }
   }
 

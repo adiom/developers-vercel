@@ -14,10 +14,16 @@ export function DeleteProject({ projectId }: DeleteProjectProps) {
   const router = useRouter()
 
   const handleDelete = async () => {
-    const result = await deleteProject(projectId)
-    if (result.success) {
-      router.push("/projects")
-      router.refresh()
+    try {
+      const result = await deleteProject(projectId)
+      if (result.success) {
+        router.push("/projects")
+        router.refresh()
+      } else {
+        console.error("Failed to delete project:", result.error)
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error)
     }
   }
 

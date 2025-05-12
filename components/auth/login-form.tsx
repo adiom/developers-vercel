@@ -26,7 +26,14 @@ export function LoginForm() {
       const formData = new FormData(event.currentTarget)
       const result = await loginUser(formData)
 
-      if (!result.success) {
+      if (result.success) {
+        // Use client-side navigation instead of server redirect
+        if (result.redirectTo) {
+          router.push(result.redirectTo)
+        } else {
+          router.push("/")
+        }
+      } else {
         setError(result.error || "An error occurred during login")
         setIsLoading(false)
       }
@@ -43,8 +50,8 @@ export function LoginForm() {
         <div className="flex items-center justify-center mb-4">
           <ShieldAlert className="h-10 w-10 text-primary" />
         </div>
-        <CardTitle className="text-2xl text-center">Login to Canfly Security</CardTitle>
-        <CardDescription className="text-center">Enter your email and password to access your account</CardDescription>
+        <CardTitle className="text-2xl text-center">Login</CardTitle>
+        <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={onSubmit} className="space-y-4">
@@ -53,12 +60,7 @@ export function LoginForm() {
             <Input id="email" name="email" type="email" placeholder="m@example.com" required />
           </div>
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
-              <Link href="/auth/forgot-password" className="text-sm text-primary hover:underline">
-                Forgot password?
-              </Link>
-            </div>
+            <Label htmlFor="password">Password</Label>
             <Input id="password" name="password" type="password" required />
           </div>
           {error && <div className="text-sm text-destructive">{error}</div>}
@@ -69,7 +71,7 @@ export function LoginForm() {
       </CardContent>
       <CardFooter className="flex flex-col">
         <div className="text-sm text-center text-muted-foreground mt-2">
-          Don&apos;t have an account?{" "}
+          Don't have an account?{" "}
           <Link href="/auth/register" className="text-primary hover:underline">
             Register
           </Link>

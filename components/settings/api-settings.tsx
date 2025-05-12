@@ -17,13 +17,17 @@ export function ApiSettings() {
     navigator.clipboard.writeText(apiKey)
   }
 
-  const handleGenerateNewKey = () => {
+  const handleGenerateNewKey = async () => {
     setIsGenerating(true)
-    // Имитация генерации нового ключа
-    setTimeout(() => {
+    try {
+      // Simulate generating a new key
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       setApiKey("sk_live_" + Math.random().toString(36).substring(2, 15))
       setIsGenerating(false)
-    }, 1000)
+    } catch (error) {
+      console.error("Error generating API key:", error)
+      setIsGenerating(false)
+    }
   }
 
   return (

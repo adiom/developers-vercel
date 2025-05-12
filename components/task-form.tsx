@@ -56,11 +56,15 @@ export function TaskForm({ projects, users }: TaskFormProps) {
         due_date: data.due_date ? data.due_date.toISOString().split("T")[0] : undefined,
       }
 
-      await createTask(formattedData)
-      router.push("/tasks")
-      router.refresh()
+      const result = await createTask(formattedData)
+      if (result.success) {
+        router.push("/tasks")
+        router.refresh()
+      } else {
+        console.error("Failed to create task:", result.error)
+      }
     } catch (error) {
-      console.error("Failed to create task:", error)
+      console.error("Error creating task:", error)
     }
   }
 

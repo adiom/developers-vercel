@@ -15,10 +15,14 @@ export function SecuritySettings() {
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Имитация сохранения
-    setTimeout(() => {
+    try {
+      // Simulate saving
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       setIsLoading(false)
-    }, 1000)
+    } catch (error) {
+      console.error("Error changing password:", error)
+      setIsLoading(false)
+    }
   }
 
   return (

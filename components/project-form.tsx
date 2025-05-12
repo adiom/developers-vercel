@@ -56,11 +56,15 @@ export function ProjectForm({ clients }: ProjectFormProps) {
         end_date: data.end_date ? data.end_date.toISOString().split("T")[0] : undefined,
       }
 
-      await createProject(formattedData)
-      router.push("/projects")
-      router.refresh()
+      const result = await createProject(formattedData)
+      if (result.success) {
+        router.push("/projects")
+        router.refresh()
+      } else {
+        console.error("Failed to create project:", result.error)
+      }
     } catch (error) {
-      console.error("Failed to create project:", error)
+      console.error("Error creating project:", error)
     }
   }
 

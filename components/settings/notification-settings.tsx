@@ -12,10 +12,14 @@ export function NotificationSettings() {
 
   const handleSave = async () => {
     setIsLoading(true)
-    // Имитация сохранения
-    setTimeout(() => {
+    try {
+      // Simulate saving
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       setIsLoading(false)
-    }, 1000)
+    } catch (error) {
+      console.error("Error saving notification settings:", error)
+      setIsLoading(false)
+    }
   }
 
   return (

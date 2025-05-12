@@ -24,10 +24,14 @@ export function UserSettings({ user }: UserSettingsProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Имитация сохранения
-    setTimeout(() => {
+    try {
+      // Simulate saving
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       setIsLoading(false)
-    }, 1000)
+    } catch (error) {
+      console.error("Error saving settings:", error)
+      setIsLoading(false)
+    }
   }
 
   return (

@@ -35,7 +35,14 @@ export function RegisterForm() {
     try {
       const result = await registerUser(formData)
 
-      if (!result.success) {
+      if (result.success) {
+        // Use client-side navigation instead of server redirect
+        if (result.redirectTo) {
+          router.push(result.redirectTo)
+        } else {
+          router.push("/")
+        }
+      } else {
         setError(result.error || "An error occurred during registration")
         setIsLoading(false)
       }

@@ -2,7 +2,6 @@
 
 import { sql } from "./db"
 import { hashPassword, verifyPassword, setAuthCookie, clearAuthCookie } from "./auth"
-import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 
 export async function registerUser(formData: FormData) {
@@ -36,10 +35,11 @@ export async function registerUser(formData: FormData) {
     // Set the auth cookie
     await setAuthCookie(result[0].id)
 
+    // Revalidate the path
     revalidatePath("/")
-    redirect("/")
 
-    return { success: true }
+    // Return success before redirect
+    return { success: true, redirectTo: "/" }
   } catch (error) {
     console.error("Registration error:", error)
     return { success: false, error: "An error occurred during registration" }
@@ -73,10 +73,11 @@ export async function loginUser(formData: FormData) {
     // Set the auth cookie
     await setAuthCookie(users[0].id)
 
+    // Revalidate the path
     revalidatePath("/")
-    redirect("/")
 
-    return { success: true }
+    // Return success before redirect
+    return { success: true, redirectTo: "/" }
   } catch (error) {
     console.error("Login error:", error)
     return { success: false, error: "An error occurred during login" }
@@ -84,7 +85,12 @@ export async function loginUser(formData: FormData) {
 }
 
 export async function logoutUser() {
-  clearAuthCookie()
-  revalidatePath("/")
-  redirect("/auth/login")
+  try {
+    clearAuthCookie()
+    revalidatePath("/")
+    return { success: true, redirectTo: "/auth/login" }
+  } catch (error) {
+    console.error("Logout error:", error)
+    return { success: false, error: "An error occurred during logout" }
+  }
 }
