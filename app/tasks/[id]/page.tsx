@@ -79,13 +79,13 @@ export default async function TaskPage({ params }: TaskPageProps) {
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>Task Details</CardTitle>
+            <CardTitle>Задача</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Project</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">Проект</h3>
                   <p>
                     <Link href={`/projects/${task.project_id}`} className="hover:underline">
                       {task.project_name}
@@ -93,22 +93,22 @@ export default async function TaskPage({ params }: TaskPageProps) {
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Status</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">Статус</h3>
                   <p>{task.status}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Assigned To</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">Исполнитель</h3>
                   <p>{task.assigned_to_name || "Unassigned"}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Due Date</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">Дата</h3>
                   <p>{formatDate(task.due_date)}</p>
                 </div>
               </div>
 
               {task.description && (
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Description</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">Описание</h3>
                   <p className="mt-1">{task.description}</p>
                 </div>
               )}
@@ -117,7 +117,7 @@ export default async function TaskPage({ params }: TaskPageProps) {
                 <Button variant="outline" size="sm" asChild>
                   <Link href={`/tasks/${taskId}/edit`}>
                     <Pencil className="mr-2 h-4 w-4" />
-                    Edit Task
+                    Редактировать
                   </Link>
                 </Button>
               </div>
@@ -127,16 +127,16 @@ export default async function TaskPage({ params }: TaskPageProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Task Information</CardTitle>
+            <CardTitle>Дополнительно</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Created</h3>
+                <h3 className="text-sm font-medium text-muted-foreground">Дата создания</h3>
                 <p>{new Date(task.created_at).toLocaleDateString()}</p>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Last Updated</h3>
+                <h3 className="text-sm font-medium text-muted-foreground">Дата обновления</h3>
                 <p>{new Date(task.updated_at).toLocaleDateString()}</p>
               </div>
             </div>

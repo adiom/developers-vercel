@@ -50,30 +50,30 @@ export function LoginForm() {
         <div className="flex items-center justify-center mb-4">
           <ShieldAlert className="h-10 w-10 text-primary" />
         </div>
-        <CardTitle className="text-2xl text-center">Login</CardTitle>
-        <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
+        <CardTitle className="text-2xl text-center">Вход</CardTitle>
+        <CardDescription className="text-center">Введите свои данные для доступа к аккаунту</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Почта</Label>
             <Input id="email" name="email" type="email" placeholder="m@example.com" required />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Пароль</Label>
             <Input id="password" name="password" type="password" required />
           </div>
           {error && <div className="text-sm text-destructive">{error}</div>}
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Login"}
+            {isLoading ? "Входим..." : "Войти"}
           </Button>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col">
         <div className="text-sm text-center text-muted-foreground mt-2">
-          Don't have an account?{" "}
+          Нет аккаунта?{" "}
           <Link href="/auth/register" className="text-primary hover:underline">
-            Register
+            Зарегистрироваться
           </Link>
         </div>
       </CardFooter>

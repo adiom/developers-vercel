@@ -38,14 +38,14 @@ export function ClientForm({ client }: ClientFormProps) {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to update client")
+        throw new Error("Не удалось обновить клиента")
       }
 
-      toast.success("Client updated successfully")
+      toast.success("Клиент успешно обновлён")
       router.refresh()
     } catch (error) {
       console.error("Error updating client:", error)
-      toast.error("Failed to update client")
+      toast.error("Не удалось обновить клиента")
     } finally {
       setIsSubmitting(false)
     }
@@ -60,7 +60,7 @@ export function ClientForm({ client }: ClientFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
         <div>
-          <Label htmlFor="name">Name</Label>
+          <Label htmlFor="name">Название</Label>
           <Input
             id="name"
             name="name"
@@ -71,7 +71,7 @@ export function ClientForm({ client }: ClientFormProps) {
         </div>
 
         <div>
-          <Label htmlFor="industry">Industry</Label>
+          <Label htmlFor="industry">Отрасль</Label>
           <Input
             id="industry"
             name="industry"
@@ -81,7 +81,7 @@ export function ClientForm({ client }: ClientFormProps) {
         </div>
 
         <div>
-          <Label htmlFor="contact_person">Contact Person</Label>
+          <Label htmlFor="contact_person">Контактное лицо</Label>
           <Input
             id="contact_person"
             name="contact_person"
@@ -91,7 +91,7 @@ export function ClientForm({ client }: ClientFormProps) {
         </div>
 
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">Почта</Label>
           <Input
             id="email"
             name="email"
@@ -102,7 +102,7 @@ export function ClientForm({ client }: ClientFormProps) {
         </div>
 
         <div>
-          <Label htmlFor="phone">Phone</Label>
+          <Label htmlFor="phone">Телефон</Label>
           <Input
             id="phone"
             name="phone"
@@ -113,7 +113,7 @@ export function ClientForm({ client }: ClientFormProps) {
         </div>
 
         <div>
-          <Label htmlFor="address">Address</Label>
+          <Label htmlFor="address">Адрес</Label>
           <Textarea
             id="address"
             name="address"
@@ -132,7 +132,7 @@ export function ClientForm({ client }: ClientFormProps) {
           Cancel
         </Button>
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save Changes"}
+          {isSubmitting ? "Сохраняем..." : "Сохранить изменения"}
         </Button>
       </div>
     </form>

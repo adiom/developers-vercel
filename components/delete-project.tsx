@@ -29,8 +29,8 @@ export function DeleteProject({ projectId }: DeleteProjectProps) {
 
   return (
     <DeleteConfirmation
-      title="Delete Project"
-      description="Are you sure you want to delete this project? This action cannot be undone and will delete all associated tasks and assessments."
+      title="Удалить проект"
+      description="Вы уверены, что хотите удалить этот проект? Это действие необратимо и приведёт к удалению всех связанных задач и оценок."
       onDelete={handleDelete}
       trigger={
         <Button variant="destructive" size="sm">

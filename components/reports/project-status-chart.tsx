@@ -28,7 +28,7 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
   const STATUS_NAMES = {
     pending: "Ожидает",
     "in progress": "В процессе",
-    completed: "Завершен",
+    completed: "Завершён",
     "on hold": "Приостановлен",
   }
 

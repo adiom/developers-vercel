@@ -17,8 +17,8 @@ export async function RecentClients() {
       LIMIT 5
     `
   } catch (e) {
-    console.error("Error fetching recent clients:", e)
-    error = "Failed to load recent clients"
+    console.error("Ошибка при получении недавних клиентов:", e)
+    error = "Не удалось загрузить клиентов"
   }
 
   return (
