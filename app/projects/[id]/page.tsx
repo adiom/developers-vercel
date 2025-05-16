@@ -15,13 +15,14 @@ interface ProjectPageProps {
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
+  const { id } = await params;
   // If the id is "new", redirect to the project creation page
-  if (params.id === "new") {
+  if (id === "new") {
     redirect("/projects/new")
   }
 
   // Parse the project ID and ensure it's a valid number
-  const projectId = Number.parseInt(params.id)
+  const projectId = Number.parseInt(id)
 
   if (isNaN(projectId)) {
     notFound()

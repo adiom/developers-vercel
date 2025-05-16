@@ -16,7 +16,8 @@ interface TeamMemberPageProps {
 
 export default async function TeamMemberPage({ params }: TeamMemberPageProps) {
   // Получаем ID сотрудника из параметров
-  const userId = Number.parseInt(params.id)
+  const { id } = await params;
+  const userId = Number.parseInt(id);
 
   if (isNaN(userId)) {
     notFound()

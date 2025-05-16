@@ -4,34 +4,33 @@ import { ArrowLeft, Pencil } from "lucide-react"
 import Link from "next/link"
 import { sql } from "@/lib/db"
 import { notFound, redirect } from "next/navigation"
+import { getClientById } from "@/lib/api"
 
 interface ClientPageProps {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
 export default async function ClientPage({ params }: ClientPageProps) {
+  const resolvedParams = await params
+  
   // If the id is "new", redirect to the client creation page
-  if (params.id === "new") {
+  if (resolvedParams.id === "new") {
     redirect("/clients/new")
   }
 
   // Parse the client ID and ensure it's a valid number
-  const clientId = Number.parseInt(params.id)
+  const clientId = Number.parseInt(resolvedParams.id)
 
   if (isNaN(clientId)) {
     notFound()
   }
 
-  // Fetch client details
-  const clientResult = await sql`SELECT * FROM clients WHERE id = ${clientId}`
+  // Fetch the client data
+  const client = await getClientById(clientId)
 
-  if (clientResult.length === 0) {
+  if (!client) {
     notFound()
   }
-
-  const client = clientResult[0]
 
   // Fetch projects for this client
   const projects = await sql`

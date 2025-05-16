@@ -13,7 +13,8 @@ interface TeamMemberEditPageProps {
 }
 
 export default async function TeamMemberEditPage({ params }: TeamMemberEditPageProps) {
-  const userId = Number.parseInt(params.id)
+  const { id } = await params;
+  const userId = Number.parseInt(id);
 
   if (isNaN(userId)) {
     notFound()

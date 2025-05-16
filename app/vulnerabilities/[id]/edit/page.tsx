@@ -11,7 +11,8 @@ interface EditVulnerabilityPageProps {
 
 export default async function EditVulnerabilityPage({ params }: EditVulnerabilityPageProps) {
   // Получаем ID уязвимости из параметров
-  const vulnerabilityId = Number.parseInt(params.id)
+  const { id } = await params;
+  const vulnerabilityId = Number.parseInt(id);
 
   if (isNaN(vulnerabilityId)) {
     notFound()

@@ -13,13 +13,14 @@ interface AssessmentPageProps {
 }
 
 export default async function AssessmentPage({ params }: AssessmentPageProps) {
+  const { id } = await params;
   // If the id is "new", redirect to the assessment creation page
-  if (params.id === "new") {
+  if (id === "new") {
     redirect("/assessments/new")
   }
 
   // Parse the assessment ID and ensure it's a valid number
-  const assessmentId = Number.parseInt(params.id)
+  const assessmentId = Number.parseInt(id)
 
   if (isNaN(assessmentId)) {
     notFound()

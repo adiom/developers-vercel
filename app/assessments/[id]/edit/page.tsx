@@ -11,7 +11,8 @@ interface EditAssessmentPageProps {
 
 export default async function EditAssessmentPage({ params }: EditAssessmentPageProps) {
   // Получаем ID оценки из параметров
-  const assessmentId = Number.parseInt(params.id)
+  const { id } = await params;
+  const assessmentId = Number.parseInt(id);
 
   if (isNaN(assessmentId)) {
     notFound()

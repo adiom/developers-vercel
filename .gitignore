@@ -1,5 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Playwright output
+playwright-report/
+test-results/
+
 # dependencies
 /node_modules
 
@@ -26,3 +30,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+# Playwright output
+test-results/
+playwright-report/

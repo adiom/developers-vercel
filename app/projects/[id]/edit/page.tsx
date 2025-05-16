@@ -11,7 +11,8 @@ interface EditProjectPageProps {
 
 export default async function EditProjectPage({ params }: EditProjectPageProps) {
   // Получаем ID проекта из параметров
-  const projectId = Number.parseInt(params.id)
+  const { id } = await params;
+  const projectId = Number.parseInt(id);
 
   if (isNaN(projectId)) {
     notFound()

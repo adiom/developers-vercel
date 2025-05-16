@@ -6,7 +6,8 @@ import TaskEditForm from "@/components/task-edit-form"
 export default async function EditTaskPage({ params }: { params: { id: string } }) {
   await requireAuth()
 
-  const taskId = Number.parseInt(params.id)
+  const { id } = await params;
+  const taskId = Number.parseInt(id);
 
   if (isNaN(taskId)) {
     notFound()

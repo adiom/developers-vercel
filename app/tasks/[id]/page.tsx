@@ -13,13 +13,14 @@ interface TaskPageProps {
 }
 
 export default async function TaskPage({ params }: TaskPageProps) {
+  const { id } = await params;
   // If the id is "new", redirect to the task creation page
-  if (params.id === "new") {
+  if (id === "new") {
     redirect("/tasks/new")
   }
 
   // Parse the task ID and ensure it's a valid number
-  const taskId = Number.parseInt(params.id)
+  const taskId = Number.parseInt(id)
 
   if (isNaN(taskId)) {
     notFound()

@@ -14,12 +14,13 @@ interface VulnerabilityPageProps {
 
 export default async function VulnerabilityPage({ params }: VulnerabilityPageProps) {
   // Если id равен "new", перенаправляем на страницу создания уязвимости
-  if (params.id === "new") {
+  const { id } = await params;
+  if (id === "new") {
     redirect("/vulnerabilities/new")
   }
 
   // Получаем ID уязвимости из параметров
-  const vulnerabilityId = Number.parseInt(params.id)
+  const vulnerabilityId = Number.parseInt(id);
 
   if (isNaN(vulnerabilityId)) {
     notFound()
