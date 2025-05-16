@@ -1,49 +1,66 @@
 import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import type { NextRequest, NextResponse as NextResponseType } from "next/server"
 
-export function middleware(request: NextRequest) {
-  const sessionToken = request.cookies.get("session_token")?.value
+type PublicRoute = `/${string}`
+
+// Constants
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Max-Age": "86400"
+} as const
+
+const PUBLIC_ROUTES: PublicRoute[] = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/forgot-password"
+]
+
+const isApiRoute = (pathname: string): boolean => pathname.startsWith("/api")
+const isPublicRoute = (pathname: string): boolean => 
+  PUBLIC_ROUTES.some(route => pathname.startsWith(route))
+const isNextInternal = (pathname: string): boolean => pathname.startsWith("/_next")
+
+const createCorsResponse = (): NextResponseType => {
+  const response = new NextResponse(null, { status: 200 })
+  Object.entries(CORS_HEADERS).forEach(([key, value]) => {
+    response.headers.set(key, value)
+  })
+  return response
+}
+
+export function middleware(request: NextRequest): NextResponseType {
   const { pathname } = request.nextUrl
+  const sessionToken = request.cookies.get("session_token")?.value
 
   // Handle CORS for API routes
-  if (pathname.startsWith("/api")) {
-    // Handle preflight requests
+  if (isApiRoute(pathname)) {
     if (request.method === "OPTIONS") {
-      return new NextResponse(null, {
-        status: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "http://localhost:3000",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-          "Access-Control-Max-Age": "86400",
-        },
-      });
+      return createCorsResponse()
     }
 
-    // Add CORS headers to API responses
-    const response = NextResponse.next();
-    response.headers.set("Access-Control-Allow-Origin", "http://localhost:3000");
-    response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    return response;
+    const response = NextResponse.next()
+    Object.entries(CORS_HEADERS).forEach(([key, value]) => {
+      response.headers.set(key, value)
+    })
+    return response
   }
 
-  // Public routes that don't require authentication
-  const publicRoutes = ["/auth/login", "/auth/register", "/auth/forgot-password"]
-
-  // Check if the route is public
-  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route))
-
-  // If there's no session token and the route is not public, redirect to login
-  if (!sessionToken && !isPublicRoute && !pathname.startsWith("/_next")) {
-    const url = new URL("/auth/login", request.url)
-    url.searchParams.set("callbackUrl", encodeURI(pathname))
-    return NextResponse.redirect(url)
+  // Skip auth checks for public routes and Next.js internal routes
+  if (isPublicRoute(pathname) || isNextInternal(pathname)) {
+    // Redirect to home if user is already authenticated
+      if (sessionToken) {
+        return NextResponse.redirect(new URL("/", request.url))
+      }
+      return NextResponse.next()
   }
 
-  // If there's a session token and the user is trying to access auth pages, redirect to home
-  if (sessionToken && isPublicRoute) {
-    return NextResponse.redirect(new URL("/", request.url))
+  // Redirect to login if not authenticated
+  if (!sessionToken) {
+    const loginUrl = new URL("/auth/login", request.url)
+    loginUrl.searchParams.set("callbackUrl", encodeURI(pathname))
+    return NextResponse.redirect(loginUrl)
   }
 
   return NextResponse.next()

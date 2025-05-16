@@ -2,6 +2,19 @@ import { NextRequest, NextResponse } from "next/server"
 import { sql } from "@/lib/db"
 import { getUserByApiKey } from "@/lib/auth"
 
+// Helper function to add CORS headers to the response
+function addCorsHeaders(response: NextResponse) {
+  response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  return response
+}
+
+export async function OPTIONS() {
+  const response = new NextResponse(null, { status: 204 })
+  return addCorsHeaders(response)
+}
+
 export async function POST(req: Request) {
   // Проверка API-ключа
   const auth = req.headers.get("authorization")
@@ -22,12 +35,12 @@ export async function POST(req: Request) {
     console.log("Request body:", body)
   } catch (e) {
     console.error("Failed to parse JSON body", e)
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 })
+    return addCorsHeaders(NextResponse.json({ error: "Invalid JSON" }, { status: 400 }))
   }
   const { project_id, title, description } = body
   if (!project_id || !title) {
     console.log("Missing project_id or title", { project_id, title })
-    return NextResponse.json({ error: "project_id and title are required" }, { status: 400 })
+    return addCorsHeaders(NextResponse.json({ error: "project_id and title are required" }, { status: 400 }))
   }
 
   try {
@@ -37,9 +50,9 @@ export async function POST(req: Request) {
       RETURNING id, title, project_id, created_at
     `
     console.log("Task created:", result[0])
-    return NextResponse.json({ task: result[0] })
+    return addCorsHeaders(NextResponse.json({ task: result[0] }))
   } catch (error) {
     console.error("Failed to create task", error, { project_id, title, description })
-    return NextResponse.json({ error: "Failed to create task" }, { status: 500 })
+    return addCorsHeaders(NextResponse.json({ error: "Failed to create task" }, { status: 500 }))
   }
 } 
