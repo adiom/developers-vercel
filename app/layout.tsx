@@ -10,7 +10,7 @@ import { getCurrentUser } from "@/lib/auth"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Canfly Security CRM",
+  title: "Разработка",
   description: "CRM system for information security company",
     generator: 'v0.dev'
 }

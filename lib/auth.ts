@@ -34,12 +34,13 @@ export async function verifyPassword(storedPassword: string, suppliedPassword: s
 }
 
 // Session management
-export function setAuthCookie(userId: number) {
+export async function setAuthCookie(userId: number) {
   // Create a session token
   const sessionToken = crypto.randomBytes(32).toString("hex")
 
   // Set the cookie (secure in production)
-  cookies().set("session_token", sessionToken, {
+  const cookieStore = await cookies()
+  cookieStore.set("session_token", sessionToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 7, // 1 week
@@ -53,8 +54,9 @@ export function setAuthCookie(userId: number) {
   `
 }
 
-export function clearAuthCookie() {
-  const sessionToken = cookies().get("session_token")?.value
+export async function clearAuthCookie() {
+  const cookieStore = await cookies()
+  const sessionToken = cookieStore.get("session_token")?.value
 
   // Delete the session from the database if it exists
   if (sessionToken) {
@@ -62,12 +64,13 @@ export function clearAuthCookie() {
   }
 
   // Clear the cookie
-  cookies().delete("session_token")
+  cookieStore.delete("session_token")
 }
 
 // Get the current user from the session
 export async function getCurrentUser() {
-  const sessionToken = cookies().get("session_token")?.value
+  const cookieStore = await cookies()
+  const sessionToken = cookieStore.get("session_token")?.value
 
   if (!sessionToken) {
     return null
@@ -114,4 +117,60 @@ export async function requireAdmin() {
   }
 
   return user
+}
+
+// API Key management
+export async function createApiKey(name: string, userId: number): Promise<{ id: number; name: string; key: string }> {
+  try {
+    // Генерируем случайный ключ
+    const key = crypto.randomBytes(32).toString("hex")
+    // Хешируем ключ для хранения в базе
+    const keyHash = await hashPassword(key)
+
+    // Сохраняем ключ в базу данных
+    const result = await sql`
+      INSERT INTO api_keys (name, key_hash, user_id)
+      VALUES (${name}, ${keyHash}, ${userId})
+      RETURNING id, name
+    `
+
+    if (!result || !result[0]) {
+      throw new Error('Failed to create API key')
+    }
+
+    // Возвращаем ID, имя и оригинальный ключ (который нужно показать пользователю только один раз)
+    return {
+      id: result[0].id,
+      name: result[0].name,
+      key: key
+    }
+  } catch (error) {
+    console.error('Error creating API key:', error)
+    throw new Error('Failed to create API key')
+  }
+}
+
+// Проверка API-ключа и возврат пользователя
+export async function getUserByApiKey(apiKey: string) {
+  // Получаем все ключи из базы
+  const keys = await sql`
+    SELECT k.key_hash, u.*
+    FROM api_keys k
+    JOIN users u ON k.user_id = u.id
+  `
+  for (const row of keys) {
+    // key_hash хранится как salt:hash
+    const [salt, storedHash] = row.key_hash.split(":")
+    const suppliedHash = await new Promise<string>((resolve, reject) => {
+      crypto.pbkdf2(apiKey, salt, 1000, 64, "sha512", (err, derivedKey) => {
+        if (err) reject(err)
+        resolve(derivedKey.toString("hex"))
+      })
+    })
+    if (storedHash === suppliedHash) {
+      // Возвращаем пользователя, если ключ совпал
+      return row
+    }
+  }
+  return null
 }

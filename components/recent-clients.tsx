@@ -24,11 +24,11 @@ export async function RecentClients() {
   return (
     <Card className="col-span-1">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Recent Clients</CardTitle>
+        <CardTitle>Клиенты</CardTitle>
         <Button size="sm" variant="outline" asChild>
           <Link href="/clients/new">
             <PlusCircle className="mr-2 h-4 w-4" />
-            Add Client
+            Добавить клиента
           </Link>
         </Button>
       </CardHeader>
@@ -41,19 +41,19 @@ export async function RecentClients() {
               <div key={client.id} className="flex items-center justify-between">
                 <div className="space-y-1">
                   <p className="font-medium">{client.name}</p>
-                  <p className="text-sm text-muted-foreground">{client.industry || "No industry specified"}</p>
+                  <p className="text-sm text-muted-foreground">{client.industry || "Не указана"}</p>
                 </div>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link href={`/clients/${client.id}`}>View</Link>
+                  <Link href={`/clients/${client.id}`}>Просмотр</Link>
                 </Button>
               </div>
             ))}
           </div>
         ) : (
           <div className="text-center py-4 text-muted-foreground">
-            <p>No clients found</p>
+            <p>Клиенты не найдены</p>
             <Button size="sm" className="mt-2" asChild>
-              <Link href="/clients/new">Add Your First Client</Link>
+              <Link href="/clients/new">Добавить первого клиента</Link>
             </Button>
           </div>
         )}

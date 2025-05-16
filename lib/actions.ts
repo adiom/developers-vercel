@@ -155,13 +155,12 @@ export async function updateTask(taskData: {
   title: string
   description: string
   status: string
-  priority: string
   due_date: string
   project_id: number | null
   assigned_to: number | null
 }) {
   try {
-    const { id, title, description, status, priority, due_date, project_id, assigned_to } = taskData
+    const { id, title, description, status, due_date, project_id, assigned_to } = taskData
 
     await sql`
       UPDATE tasks
@@ -169,7 +168,6 @@ export async function updateTask(taskData: {
         title = ${title},
         description = ${description},
         status = ${status},
-        priority = ${priority},
         due_date = ${due_date ? new Date(due_date) : null},
         project_id = ${project_id},
         assigned_to = ${assigned_to},

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 export default function Loading() {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl font-bold">Центр управления</h1>
 
       {/* Dashboard Stats Skeleton */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -22,7 +22,7 @@ export function Sidebar() {
 
   const routes = [
     {
-      name: "Панель управления",
+      name: "Центр управления",
       path: "/",
       icon: Home,
     },
@@ -78,7 +78,7 @@ export function Sidebar() {
       <div className="flex h-16 items-center border-b px-4">
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <ShieldAlert className="h-6 w-6" />
-          <span>Canfly Security</span>
+          <span>Разработка</span>
         </Link>
       </div>
       <div className="py-4">

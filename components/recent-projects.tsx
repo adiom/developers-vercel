@@ -41,11 +41,11 @@ export async function RecentProjects() {
   return (
     <Card className="col-span-1">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Recent Projects</CardTitle>
+        <CardTitle>Проекты</CardTitle>
         <Button size="sm" variant="outline" asChild>
           <Link href="/projects/new">
             <PlusCircle className="mr-2 h-4 w-4" />
-            Add Project
+            Добавить проект
           </Link>
         </Button>
       </CardHeader>
@@ -73,9 +73,9 @@ export async function RecentProjects() {
           </div>
         ) : (
           <div className="text-center py-4 text-muted-foreground">
-            <p>No projects found</p>
+            <p>Проекты не найдены</p>
             <Button size="sm" className="mt-2" asChild>
-              <Link href="/projects/new">Add Your First Project</Link>
+              <Link href="/projects/new">Добавить первый проект</Link>
             </Button>
           </div>
         )}

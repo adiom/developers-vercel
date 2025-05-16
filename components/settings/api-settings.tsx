@@ -10,8 +10,9 @@ import { Switch } from "@/components/ui/switch"
 
 export function ApiSettings() {
   const [showApiKey, setShowApiKey] = useState(false)
-  const [apiKey, setApiKey] = useState("sk_live_51NZXr3JHwNX6S8kGqLREG6...")
+  const [apiKey, setApiKey] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
+  const [name, setName] = useState("")
 
   const handleCopyApiKey = () => {
     navigator.clipboard.writeText(apiKey)
@@ -20,12 +21,20 @@ export function ApiSettings() {
   const handleGenerateNewKey = async () => {
     setIsGenerating(true)
     try {
-      // Simulate generating a new key
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setApiKey("sk_live_" + Math.random().toString(36).substring(2, 15))
-      setIsGenerating(false)
+      const res = await fetch("/api/api-keys", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      })
+      const data = await res.json()
+      if (data.apiKey) {
+        setApiKey(data.apiKey.key)
+      } else {
+        alert(data.error || "Ошибка при создании ключа")
+      }
     } catch (error) {
-      console.error("Error generating API key:", error)
+      alert("Ошибка при создании ключа")
+    } finally {
       setIsGenerating(false)
     }
   }
@@ -59,18 +68,23 @@ export function ApiSettings() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Input
+              placeholder="Название ключа (например, Мой сервис)"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              className="max-w-xs"
+            />
             <Button
               type="button"
               variant="outline"
               onClick={handleGenerateNewKey}
-              disabled={isGenerating}
+              disabled={isGenerating || !name.trim()}
               className="flex items-center"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
               {isGenerating ? "Генерация..." : "Создать новый ключ"}
             </Button>
-            <p className="text-sm text-muted-foreground">Создан: 01.04.2023</p>
           </div>
         </CardContent>
       </Card>
