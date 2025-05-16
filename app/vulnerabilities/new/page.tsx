@@ -1,3 +1,5 @@
+"use client";
+
 import { createVulnerability } from "@/lib/actions";
 import { useState } from "react";
 
