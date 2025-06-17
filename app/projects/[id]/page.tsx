@@ -7,6 +7,8 @@ import Link from "next/link"
 import { sql } from "@/lib/db"
 import { notFound, redirect } from "next/navigation"
 import { DeleteProjectButton } from "@/components/delete-project-button"
+import ReactMarkdown from 'react-markdown'
+import { getCurrentUser } from "@/lib/auth"
 
 interface ProjectPageProps {
   params: {
@@ -16,6 +18,9 @@ interface ProjectPageProps {
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { id } = await params;
+  const user = await getCurrentUser()
+  const isAuthenticated = !!user
+
   // If the id is "new", redirect to the project creation page
   if (id === "new") {
     redirect("/projects/new")
@@ -42,23 +47,22 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const project = projectResult[0]
 
-  // Fetch tasks for this project
-  const tasks = await sql`
+  // Only fetch tasks and assessments if user is authenticated
+  const tasks = isAuthenticated ? await sql`
     SELECT t.*, u.name as assigned_to_name
     FROM tasks t
     LEFT JOIN users u ON t.assigned_to = u.id
     WHERE t.project_id = ${projectId}
     ORDER BY t.due_date ASC NULLS LAST
-  `
+  ` : []
 
-  // Fetch assessments for this project
-  const assessments = await sql`
+  const assessments = isAuthenticated ? await sql`
     SELECT a.*, u.name as conducted_by_name
     FROM assessments a
     LEFT JOIN users u ON a.conducted_by = u.id
     WHERE a.project_id = ${projectId}
     ORDER BY a.assessment_date DESC NULLS LAST
-  `
+  ` : []
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -103,15 +107,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <CardTitle>Project Details</CardTitle>
                 <CardDescription>Information about the project</CardDescription>
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={`/projects/${projectId}/edit`}>
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Edit
-                  </Link>
-                </Button>
-                <DeleteProjectButton projectId={projectId} projectName={project.name} />
-              </div>
+              {isAuthenticated && (
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={`/projects/${projectId}/edit`}>
+                      <Pencil className="mr-2 h-4 w-4" />
+                      Edit
+                    </Link>
+                  </Button>
+                  <DeleteProjectButton projectId={projectId} projectName={project.name} />
+                </div>
+              )}
             </div>
           </CardHeader>
           <CardContent>
@@ -138,7 +144,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {project.description && (
                 <div>
                   <h3 className="text-sm font-medium text-muted-foreground">Description</h3>
-                  <p className="mt-1">{project.description}</p>
+                  <div className="mt-1 prose prose-sm dark:prose-invert">
+                    <ReactMarkdown>{project.description}</ReactMarkdown>
+                  </div>
                 </div>
               )}
             </div>
@@ -151,14 +159,27 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Tasks</h3>
-                <p className="text-2xl font-bold">{tasks.length}</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Assessments</h3>
-                <p className="text-2xl font-bold">{assessments.length}</p>
-              </div>
+              {isAuthenticated ? (
+                <>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">Tasks</h3>
+                    <p className="text-2xl font-bold">{tasks.length}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">Assessments</h3>
+                    <p className="text-2xl font-bold">{assessments.length}</p>
+                  </div>
+                </>
+              ) : (
+                <div className="text-center py-4">
+                  <p className="text-sm text-muted-foreground">
+                    Sign in to view detailed project information
+                  </p>
+                  <Button className="mt-2" asChild>
+                    <Link href="/login">Sign In</Link>
+                  </Button>
+                </div>
+              )}
               <div>
                 <h3 className="text-sm font-medium text-muted-foreground">Created</h3>
                 <p>{new Date(project.created_at).toLocaleDateString()}</p>
@@ -172,130 +193,132 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Card>
       </div>
 
-      <Tabs defaultValue="tasks">
-        <TabsList>
-          <TabsTrigger value="tasks">Tasks</TabsTrigger>
-          <TabsTrigger value="assessments">Security Assessments</TabsTrigger>
-        </TabsList>
-        <TabsContent value="tasks" className="space-y-4 pt-4">
-          <div className="flex justify-between">
-            <h2 className="text-xl font-semibold">Tasks</h2>
-            <Button size="sm" asChild>
-              <Link href={`/tasks/new?project=${projectId}`}>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Add Task
-              </Link>
-            </Button>
-          </div>
+      {isAuthenticated && (
+        <Tabs defaultValue="tasks">
+          <TabsList>
+            <TabsTrigger value="tasks">Tasks</TabsTrigger>
+            <TabsTrigger value="assessments">Security Assessments</TabsTrigger>
+          </TabsList>
+          <TabsContent value="tasks" className="space-y-4 pt-4">
+            <div className="flex justify-between">
+              <h2 className="text-xl font-semibold">Tasks</h2>
+              <Button size="sm" asChild>
+                <Link href={`/tasks/new?project=${projectId}`}>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Add Task
+                </Link>
+              </Button>
+            </div>
 
-          {tasks.length > 0 ? (
-            <div className="rounded-md border">
-              <div className="grid grid-cols-12 gap-4 p-4 font-medium border-b">
-                <div className="col-span-5">Title</div>
-                <div className="col-span-2">Status</div>
-                <div className="col-span-2">Assigned To</div>
-                <div className="col-span-2">Due Date</div>
-                <div className="col-span-1"></div>
-              </div>
-              {tasks.map((task) => (
-                <div key={task.id} className="grid grid-cols-12 gap-4 p-4 border-b last:border-0 items-center">
-                  <div className="col-span-5">
-                    <div className="font-medium">{task.title}</div>
-                    {task.description && (
-                      <div className="text-sm text-muted-foreground line-clamp-1">{task.description}</div>
-                    )}
-                  </div>
-                  <div className="col-span-2">
-                    <Badge className={getStatusColor(task.status)} variant="outline">
-                      {task.status}
-                    </Badge>
-                  </div>
-                  <div className="col-span-2">{task.assigned_to_name || "Unassigned"}</div>
-                  <div className="col-span-2">{formatDate(task.due_date)}</div>
-                  <div className="col-span-1 text-right">
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link href={`/tasks/${task.id}`}>View</Link>
-                    </Button>
-                  </div>
+            {tasks.length > 0 ? (
+              <div className="rounded-md border">
+                <div className="grid grid-cols-12 gap-4 p-4 font-medium border-b">
+                  <div className="col-span-5">Title</div>
+                  <div className="col-span-2">Status</div>
+                  <div className="col-span-2">Assigned To</div>
+                  <div className="col-span-2">Due Date</div>
+                  <div className="col-span-1"></div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-              <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-                <h3 className="mt-4 text-lg font-semibold">No tasks found</h3>
-                <p className="mb-4 mt-2 text-sm text-muted-foreground">
-                  You haven't added any tasks to this project yet.
-                </p>
-                <Button asChild>
-                  <Link href={`/tasks/new?project=${projectId}`}>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Add Task
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          )}
-        </TabsContent>
-
-        <TabsContent value="assessments" className="space-y-4 pt-4">
-          <div className="flex justify-between">
-            <h2 className="text-xl font-semibold">Security Assessments</h2>
-            <Button size="sm" asChild>
-              <Link href={`/assessments/new?project=${projectId}`}>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Add Assessment
-              </Link>
-            </Button>
-          </div>
-
-          {assessments.length > 0 ? (
-            <div className="rounded-md border">
-              <div className="grid grid-cols-12 gap-4 p-4 font-medium border-b">
-                <div className="col-span-3">Type</div>
-                <div className="col-span-2">Status</div>
-                <div className="col-span-2">Risk Level</div>
-                <div className="col-span-2">Conducted By</div>
-                <div className="col-span-2">Date</div>
-                <div className="col-span-1"></div>
-              </div>
-              {assessments.map((assessment) => (
-                <div key={assessment.id} className="grid grid-cols-12 gap-4 p-4 border-b last:border-0 items-center">
-                  <div className="col-span-3 font-medium">{assessment.assessment_type}</div>
-                  <div className="col-span-2">
-                    <Badge className={getStatusColor(assessment.status)} variant="outline">
-                      {assessment.status}
-                    </Badge>
+                {tasks.map((task) => (
+                  <div key={task.id} className="grid grid-cols-12 gap-4 p-4 border-b last:border-0 items-center">
+                    <div className="col-span-5">
+                      <div className="font-medium">{task.title}</div>
+                      {task.description && (
+                        <div className="text-sm text-muted-foreground line-clamp-1">{task.description}</div>
+                      )}
+                    </div>
+                    <div className="col-span-2">
+                      <Badge className={getStatusColor(task.status)} variant="outline">
+                        {task.status}
+                      </Badge>
+                    </div>
+                    <div className="col-span-2">{task.assigned_to_name || "Unassigned"}</div>
+                    <div className="col-span-2">{formatDate(task.due_date)}</div>
+                    <div className="col-span-1 text-right">
+                      <Button variant="ghost" size="sm" asChild>
+                        <Link href={`/tasks/${task.id}`}>View</Link>
+                      </Button>
+                    </div>
                   </div>
-                  <div className="col-span-2">{assessment.risk_level || "Not assessed"}</div>
-                  <div className="col-span-2">{assessment.conducted_by_name || "Not assigned"}</div>
-                  <div className="col-span-2">{formatDate(assessment.assessment_date)}</div>
-                  <div className="col-span-1 text-right">
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link href={`/assessments/${assessment.id}`}>View</Link>
-                    </Button>
-                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+                <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
+                  <h3 className="mt-4 text-lg font-semibold">No tasks found</h3>
+                  <p className="mb-4 mt-2 text-sm text-muted-foreground">
+                    You haven't added any tasks to this project yet.
+                  </p>
+                  <Button asChild>
+                    <Link href={`/tasks/new?project=${projectId}`}>
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      Add Task
+                    </Link>
+                  </Button>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-              <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-                <h3 className="mt-4 text-lg font-semibold">No assessments found</h3>
-                <p className="mb-4 mt-2 text-sm text-muted-foreground">
-                  You haven't added any security assessments to this project yet.
-                </p>
-                <Button asChild>
-                  <Link href={`/assessments/new?project=${projectId}`}>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Add Assessment
-                  </Link>
-                </Button>
               </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="assessments" className="space-y-4 pt-4">
+            <div className="flex justify-between">
+              <h2 className="text-xl font-semibold">Security Assessments</h2>
+              <Button size="sm" asChild>
+                <Link href={`/assessments/new?project=${projectId}`}>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Add Assessment
+                </Link>
+              </Button>
             </div>
-          )}
-        </TabsContent>
-      </Tabs>
+
+            {assessments.length > 0 ? (
+              <div className="rounded-md border">
+                <div className="grid grid-cols-12 gap-4 p-4 font-medium border-b">
+                  <div className="col-span-3">Type</div>
+                  <div className="col-span-2">Status</div>
+                  <div className="col-span-2">Risk Level</div>
+                  <div className="col-span-2">Conducted By</div>
+                  <div className="col-span-2">Date</div>
+                  <div className="col-span-1"></div>
+                </div>
+                {assessments.map((assessment) => (
+                  <div key={assessment.id} className="grid grid-cols-12 gap-4 p-4 border-b last:border-0 items-center">
+                    <div className="col-span-3 font-medium">{assessment.assessment_type}</div>
+                    <div className="col-span-2">
+                      <Badge className={getStatusColor(assessment.status)} variant="outline">
+                        {assessment.status}
+                      </Badge>
+                    </div>
+                    <div className="col-span-2">{assessment.risk_level || "Not assessed"}</div>
+                    <div className="col-span-2">{assessment.conducted_by_name || "Not assigned"}</div>
+                    <div className="col-span-2">{formatDate(assessment.assessment_date)}</div>
+                    <div className="col-span-1 text-right">
+                      <Button variant="ghost" size="sm" asChild>
+                        <Link href={`/assessments/${assessment.id}`}>View</Link>
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+                <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
+                  <h3 className="mt-4 text-lg font-semibold">No assessments found</h3>
+                  <p className="mb-4 mt-2 text-sm text-muted-foreground">
+                    You haven't added any security assessments to this project yet.
+                  </p>
+                  <Button asChild>
+                    <Link href={`/assessments/new?project=${projectId}`}>
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      Add Assessment
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+      )}
     </div>
   )
 }

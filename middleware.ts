@@ -21,6 +21,8 @@ const isApiRoute = (pathname: string): boolean => pathname.startsWith("/api")
 const isPublicRoute = (pathname: string): boolean => 
   PUBLIC_ROUTES.some(route => pathname.startsWith(route))
 const isNextInternal = (pathname: string): boolean => pathname.startsWith("/_next")
+const isProjectViewRoute = (pathname: string): boolean => 
+  /^\/projects\/\d+$/.test(pathname)
 
 const createCorsResponse = (): NextResponseType => {
   const response = new NextResponse(null, { status: 200 })
@@ -50,10 +52,15 @@ export function middleware(request: NextRequest): NextResponseType {
   // Skip auth checks for public routes and Next.js internal routes
   if (isPublicRoute(pathname) || isNextInternal(pathname)) {
     // Redirect to home if user is already authenticated
-      if (sessionToken) {
-        return NextResponse.redirect(new URL("/", request.url))
-      }
-      return NextResponse.next()
+    if (sessionToken) {
+      return NextResponse.redirect(new URL("/", request.url))
+    }
+    return NextResponse.next()
+  }
+
+  // Allow public access to project view pages for GET requests
+  if (isProjectViewRoute(pathname) && request.method === "GET") {
+    return NextResponse.next()
   }
 
   // Redirect to login if not authenticated

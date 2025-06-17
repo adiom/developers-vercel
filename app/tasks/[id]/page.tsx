@@ -5,6 +5,7 @@ import { ArrowLeft, Pencil } from "lucide-react"
 import Link from "next/link"
 import { sql } from "@/lib/db"
 import { notFound, redirect } from "next/navigation"
+import ReactMarkdown from 'react-markdown'
 
 interface TaskPageProps {
   params: {
@@ -70,7 +71,7 @@ export default async function TaskPage({ params }: TaskPageProps) {
             <span className="sr-only">Back</span>
           </Link>
         </Button>
-        <h1 className="text-3xl font-bold">{task.title}</h1>
+        <h1 className="text-3xl font-bold">Задача: {task.title}</h1>
         <Badge className={getStatusColor(task.status)} variant="outline">
           {task.status}
         </Badge>
@@ -78,9 +79,6 @@ export default async function TaskPage({ params }: TaskPageProps) {
 
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>Задача</CardTitle>
-          </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -109,7 +107,9 @@ export default async function TaskPage({ params }: TaskPageProps) {
               {task.description && (
                 <div>
                   <h3 className="text-sm font-medium text-muted-foreground">Описание</h3>
-                  <p className="mt-1">{task.description}</p>
+                  <div className="mt-1 prose prose-sm dark:prose-invert">
+                    <ReactMarkdown>{task.description}</ReactMarkdown>
+                  </div>
                 </div>
               )}
 

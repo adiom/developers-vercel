@@ -16,6 +16,7 @@ import {
 
 interface HeaderProps {
   user?: {
+    user_id: number
     name: string
     email: string
     role: string
@@ -41,7 +42,7 @@ export function Header({ user }: HeaderProps) {
       <div className="flex h-14 items-center px-4 md:px-6">
         <div className="flex items-center gap-2 font-semibold">
           <Link href="/" className="flex items-center gap-2">
-            <span className="hidden md:inline-block">Разработка</span>
+            <span className="hidden md:inline-block">dev.canfly.org</span>
           </Link>
         </div>
         <div className="ml-auto flex items-center gap-2">

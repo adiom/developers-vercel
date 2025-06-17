@@ -8,7 +8,7 @@ if (!process.env.DATABASE_URL) {
 const sql = neon(process.env.DATABASE_URL)
 
 // Initialize database tables
-export async function initDatabase() {
+async function initDatabase() {
   try {
     // Create users table if it doesn't exist
     await sql`
@@ -94,4 +94,4 @@ export async function initDatabase() {
   }
 }
 
-export { sql }
+export { sql, initDatabase }
