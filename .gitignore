@@ -33,3 +33,6 @@ next-env.d.ts
 # Playwright output
 test-results/
 playwright-report/
+
+# OpenMemory - IDE/Assistant specific rules
+.cursor/rules/openmemory.mdc

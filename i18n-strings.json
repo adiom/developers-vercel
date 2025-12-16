@@ -1,0 +1,696 @@
+{
+  "/Users/adiom/Canfly/Developers/app/analytics/page.tsx": [
+    "Аналитика",
+    "Анализ данных безопасности и производительности",
+    "Метрики безопасности",
+    "Распределение клиентов",
+    "Выполнение проектов",
+    "Ключевые метрики безопасности",
+    "Тренды основных показателей безопасности по месяцам",
+    "Среднее время устранения (дни)",
+    "4.8",
+    "↓ 12% по сравнению с прошлым месяцем",
+    "Открытые уязвимости",
+    "26",
+    "↓ 10% по сравнению с прошлым месяцем",
+    "Соответствие требованиям (%)",
+    "92%",
+    "↑ 4% по сравнению с прошлым месяцем",
+    "Распределение клиентов по отраслям",
+    "Анализ клиентской базы по секторам экономики",
+    "Выполнение проектов по месяцам",
+    "Соотношение запущенных и завершенных проектов"
+  ],
+  "/Users/adiom/Canfly/Developers/app/assessments/[id]/edit/page.tsx": [
+    "Редактирование оценки безопасности",
+    "Обновите информацию об оценке безопасности",
+    "Информация об оценке",
+    "Внесите необходимые изменения"
+  ],
+  "/Users/adiom/Canfly/Developers/app/assessments/[id]/page.tsx": [
+    "Back",
+    "Assessment Details",
+    "Edit Assessment",
+    "Project",
+    "Status",
+    "Conducted By",
+    "Assessment Date",
+    "Risk Level",
+    "Findings",
+    "Assessment Information",
+    "Vulnerabilities",
+    "Created",
+    "Last Updated",
+    "Add Vulnerability",
+    "0 ? (",
+    "Severity: {vulnerability.severity} • Status: {vulnerability.status}",
+    "View",
+    "No vulnerabilities found for this assessment",
+    "Add First Vulnerability"
+  ],
+  "/Users/adiom/Canfly/Developers/app/assessments/page.tsx": [
+    "Оценки безопасности",
+    "Добавить оценку",
+    "Ожидающие ({pendingAssessments.length})",
+    "В процессе ({inProgressAssessments.length})",
+    "Завершенные ({completedAssessments.length})",
+    "Все ({assessments.length})",
+    "Оценки не найдены",
+    "В этой категории нет оценок безопасности.",
+    "Тип оценки",
+    "Проект",
+    "Статус",
+    "Уровень риска",
+    "Дата",
+    "Не оценено",
+    "Просмотр"
+  ],
+  "/Users/adiom/Canfly/Developers/app/clients/[id]/edit/page.tsx": [
+    "Edit Client"
+  ],
+  "/Users/adiom/Canfly/Developers/app/clients/[id]/page.tsx": [
+    "Back",
+    "Client Details",
+    "Edit Client",
+    "Industry",
+    "Contact Person",
+    "Email",
+    "Phone",
+    "Address",
+    "Client Summary",
+    "Projects",
+    "Created",
+    "Last Updated",
+    "Add Project",
+    "0 ? (",
+    "View",
+    "No projects found for this client",
+    "Add First Project"
+  ],
+  "/Users/adiom/Canfly/Developers/app/clients/new/page.tsx": [
+    "Add New Client",
+    "Create a new client record in the system",
+    "Client Information",
+    "Enter the details of the new client"
+  ],
+  "/Users/adiom/Canfly/Developers/app/clients/page.tsx": [
+    "Клиенты",
+    "Добавить клиента",
+    "Контактная информация:",
+    "Email:",
+    "Телефон:",
+    "Просмотр",
+    "Клиенты не найдены",
+    "Вы еще не добавили ни одного клиента. Добавьте одного, чтобы начать."
+  ],
+  "/Users/adiom/Canfly/Developers/app/i18n-provider.tsx": [
+    "const locales: Record"
+  ],
+  "/Users/adiom/Canfly/Developers/app/loading.tsx": [
+    "Центр управления"
+  ],
+  "/Users/adiom/Canfly/Developers/app/page.tsx": [
+    "Dashboard"
+  ],
+  "/Users/adiom/Canfly/Developers/app/projects/[id]/edit/page.tsx": [
+    "Редактирование проекта",
+    "Обновите информацию о проекте",
+    "Информация о проекте",
+    "Внесите необходимые изменения"
+  ],
+  "/Users/adiom/Canfly/Developers/app/projects/[id]/page.tsx": [
+    "Back",
+    "Project Details",
+    "Information about the project",
+    "Edit",
+    "Client",
+    "Status",
+    "Start Date",
+    "End Date",
+    "Description",
+    "Project Summary",
+    "Tasks",
+    "Assessments",
+    "Sign in to view detailed project information",
+    "Sign In",
+    "Created",
+    "Last Updated",
+    "Security Assessments",
+    "Add Task",
+    "0 ? (",
+    "Title",
+    "Assigned To",
+    "Due Date",
+    "View",
+    "No tasks found",
+    "You haven't added any tasks to this project yet.",
+    "Add Assessment",
+    "Type",
+    "Risk Level",
+    "Conducted By",
+    "Date",
+    "No assessments found",
+    "You haven't added any security assessments to this project yet."
+  ],
+  "/Users/adiom/Canfly/Developers/app/projects/new/page.tsx": [
+    "Add New Project",
+    "Create a new security project",
+    "Project Information",
+    "Enter the details of the new project"
+  ],
+  "/Users/adiom/Canfly/Developers/app/projects/page.tsx": [
+    "Projects",
+    "Add Project",
+    "Start Date:",
+    "End Date:",
+    "View Details",
+    "No projects found",
+    "You haven't added any projects yet. Add one to get started."
+  ],
+  "/Users/adiom/Canfly/Developers/app/reports/page.tsx": [
+    "Отчеты",
+    "Создать новый отчет",
+    "Панель отчетов",
+    "Сохраненные отчеты",
+    "Уязвимости по серьезности",
+    "Распределение уязвимостей по уровню серьезности",
+    "Статус проектов",
+    "Распределение проектов по текущему статусу",
+    "Оценки по уровню риска",
+    "Распределение оценок безопасности по уровню риска",
+    "Тренд уязвимостей",
+    "Количество обнаруженных и закрытых уязвимостей по времени",
+    "Список сгенерированных отчетов",
+    "Создан: {report.date} • Тип: {report.type}",
+    "Скачать"
+  ],
+  "/Users/adiom/Canfly/Developers/app/settings/page.tsx": [
+    "Настройки",
+    "Управление настройками учетной записи и системы",
+    "Профиль",
+    "Безопасность",
+    "Уведомления",
+    "API"
+  ],
+  "/Users/adiom/Canfly/Developers/app/tasks/[id]/edit/page.tsx": [
+    "Редактировать задачу"
+  ],
+  "/Users/adiom/Canfly/Developers/app/tasks/[id]/page.tsx": [
+    "Back",
+    "Задача: {task.title}",
+    "Проект",
+    "Статус",
+    "Исполнитель",
+    "Дата",
+    "Описание",
+    "Редактировать",
+    "Дополнительно",
+    "Дата создания",
+    "Дата обновления"
+  ],
+  "/Users/adiom/Canfly/Developers/app/tasks/new/page.tsx": [
+    "Add New Task",
+    "Create a new task for a security project",
+    "Task Information",
+    "Enter the details of the new task"
+  ],
+  "/Users/adiom/Canfly/Developers/app/tasks/page.tsx": [
+    "Tasks",
+    "Add Task",
+    "Pending ({pendingTasks.length})",
+    "In Progress ({inProgressTasks.length})",
+    "Completed ({completedTasks.length})",
+    "All Tasks ({tasks.length})",
+    "No tasks found",
+    "There are no tasks in this category.",
+    "Title",
+    "Project",
+    "Status",
+    "Due Date",
+    "View"
+  ],
+  "/Users/adiom/Canfly/Developers/app/team/[id]/edit/page.tsx": [
+    "Назад",
+    "Редактирование профиля",
+    "Информация о сотруднике",
+    "Обновите информацию о сотруднике и нажмите \"Сохранить\", чтобы применить изменения."
+  ],
+  "/Users/adiom/Canfly/Developers/app/team/[id]/page.tsx": [
+    "Назад",
+    "Профиль сотрудника",
+    "Редактировать",
+    "Информация",
+    "Активные задачи",
+    "t.status !== \"completed\").length}",
+    "Проведенные оценки",
+    "Дата регистрации",
+    "Текущие задачи",
+    "0 ? (",
+    "Проект: {task.project_name} • Статус: {task.status}",
+    "Просмотр",
+    "Нет активных задач",
+    "Проведенные оценки безопасности",
+    "Нет проведенных оценок"
+  ],
+  "/Users/adiom/Canfly/Developers/app/team/invite/page.tsx": [
+    "Назад",
+    "Пригласить сотрудника",
+    "Информация о приглашении",
+    "Заполните форму ниже, чтобы отправить приглашение новому сотруднику."
+  ],
+  "/Users/adiom/Canfly/Developers/app/team/page.tsx": [
+    "Команда",
+    "Пригласить сотрудника",
+    "Все роли",
+    "Администратор",
+    "Менеджер",
+    "Аналитик",
+    "Тестировщик",
+    "Применить",
+    "задач",
+    "оценок",
+    "Просмотр профиля",
+    "Сотрудники не найдены"
+  ],
+  "/Users/adiom/Canfly/Developers/app/vulnerabilities/[id]/edit/page.tsx": [
+    "Редактирование уязвимости",
+    "Обновите информацию об уязвимости",
+    "Информация об уязвимости",
+    "Внесите необходимые изменения"
+  ],
+  "/Users/adiom/Canfly/Developers/app/vulnerabilities/[id]/page.tsx": [
+    "Назад",
+    "Детали уязвимости",
+    "Редактировать",
+    "Проект",
+    "Оценка",
+    "Серьезность",
+    "Статус",
+    "Описание",
+    "Рекомендации по устранению",
+    "Информация",
+    "Создано",
+    "Последнее обновление",
+    "Хронология изменений",
+    "Создание уязвимости",
+    "Обновление уязвимости",
+    "Обновлено"
+  ],
+  "/Users/adiom/Canfly/Developers/app/vulnerabilities/new/page.tsx": [
+    "Создать уязвимость",
+    "Низкая",
+    "Средняя",
+    "Высокая",
+    "Критическая",
+    "Создать",
+    "Уязвимость создана!"
+  ],
+  "/Users/adiom/Canfly/Developers/app/vulnerabilities/page.tsx": [
+    "Уязвимости",
+    "Добавить уязвимость",
+    "Открытые ({openVulnerabilities.length})",
+    "В работе ({inProgressVulnerabilities.length})",
+    "Закрытые ({closedVulnerabilities.length})",
+    "Все ({vulnerabilities.length})",
+    "Уязвимости не найдены",
+    "В этой категории нет уязвимостей.",
+    "Название",
+    "Серьезность",
+    "Статус",
+    "Проект",
+    "Оценка",
+    "Просмотр"
+  ],
+  "/Users/adiom/Canfly/Developers/components/assessment-edit-form.tsx": [
+    "Проект",
+    "Тип оценки",
+    "Проведена",
+    "Дата оценки",
+    "Выберите дату",
+    "Статус",
+    "Ожидает",
+    "В процессе",
+    "Завершено",
+    "Уровень риска",
+    "Низкий",
+    "Средний",
+    "Высокий",
+    "Критический",
+    "Результаты",
+    "Отмена",
+    "Сохранить изменения"
+  ],
+  "/Users/adiom/Canfly/Developers/components/auth/login-form.tsx": [
+    "Вход",
+    "Введите свои данные для доступа к аккаунту",
+    "Почта",
+    "Пароль",
+    "Нет аккаунта?{\" \"}",
+    "Зарегистрироваться"
+  ],
+  "/Users/adiom/Canfly/Developers/components/auth/register-form.tsx": [
+    "Create an Account",
+    "Enter your information to create an account",
+    "Full Name",
+    "Email",
+    "Password",
+    "Confirm Password",
+    "Already have an account?{\" \"}",
+    "Login"
+  ],
+  "/Users/adiom/Canfly/Developers/components/client-edit-form.tsx": [
+    "Название компании",
+    "Отрасль",
+    "Контактное лицо",
+    "Email",
+    "Телефон",
+    "Адрес",
+    "Отмена",
+    "Сохранить изменения"
+  ],
+  "/Users/adiom/Canfly/Developers/components/client-form.tsx": [
+    "Company Name",
+    "Industry",
+    "Contact Person",
+    "Email",
+    "Phone",
+    "Address",
+    "Cancel",
+    "Save Client"
+  ],
+  "/Users/adiom/Canfly/Developers/components/clients/client-form.tsx": [
+    "Название",
+    "Отрасль",
+    "Контактное лицо",
+    "Почта",
+    "Телефон",
+    "Адрес",
+    "Cancel"
+  ],
+  "/Users/adiom/Canfly/Developers/components/database-status.tsx": [
+    "Database not configured"
+  ],
+  "/Users/adiom/Canfly/Developers/components/delete-confirmation.tsx": [
+    "Promise",
+    "Delete",
+    "Cancel"
+  ],
+  "/Users/adiom/Canfly/Developers/components/delete-project.tsx": [
+    "Delete"
+  ],
+  "/Users/adiom/Canfly/Developers/components/header.tsx": [
+    "dev.canfly.org",
+    "3",
+    "User menu",
+    "My Account",
+    "Settings",
+    "Log out",
+    "Log in"
+  ],
+  "/Users/adiom/Canfly/Developers/components/project-edit-form.tsx": [
+    "Клиент",
+    "Название проекта",
+    "Описание",
+    "Дата начала",
+    "Выберите дату",
+    "Дата окончания",
+    "Статус",
+    "Ожидает",
+    "В процессе",
+    "Завершен",
+    "Приостановлен",
+    "Отмена",
+    "Сохранить изменения"
+  ],
+  "/Users/adiom/Canfly/Developers/components/project-form.tsx": [
+    "Client",
+    "Project Name",
+    "Description",
+    "Start Date",
+    "Pick a date",
+    "End Date",
+    "Status",
+    "Pending",
+    "In Progress",
+    "Completed",
+    "On Hold",
+    "Cancel",
+    "Save Project"
+  ],
+  "/Users/adiom/Canfly/Developers/components/recent-clients.tsx": [
+    "Клиенты",
+    "Добавить клиента",
+    "0 ? (",
+    "Просмотр",
+    "Клиенты не найдены",
+    "Добавить первого клиента"
+  ],
+  "/Users/adiom/Canfly/Developers/components/recent-projects.tsx": [
+    "Проекты",
+    "Добавить проект",
+    "0 ? (",
+    "View",
+    "Проекты не найдены",
+    "Добавить первый проект"
+  ],
+  "/Users/adiom/Canfly/Developers/components/security-alerts.tsx": [
+    "Security Alerts",
+    "0 ? (",
+    "Date: {formatDate(alert.created_at)}",
+    "View",
+    "No security alerts found",
+    "View All Alerts"
+  ],
+  "/Users/adiom/Canfly/Developers/components/settings/api-key-settings.tsx": [
+    "Создание API ключа",
+    "Создайте новый API ключ для доступа к API",
+    "Название ключа",
+    "Активные API ключи",
+    "Управление вашими API ключами",
+    "У вас пока нет активных API ключей",
+    "Создан: {new Date(key.created_at).toLocaleDateString()}",
+    "Удалить"
+  ],
+  "/Users/adiom/Canfly/Developers/components/settings/api-settings.tsx": [
+    "API ключи",
+    "Управление ключами API для интеграции с другими системами",
+    "API ключ",
+    "Настройки API",
+    "Настройте параметры доступа к API",
+    "Ограничение по IP",
+    "Разрешить доступ только с определенных IP-адресов",
+    "Ограничение запросов",
+    "Ограничить количество запросов в минуту",
+    "Логирование запросов",
+    "Вести журнал всех API-запросов",
+    "Сохранить настройки",
+    "Webhook-интеграции",
+    "Настройте webhook-уведомления для внешних систем",
+    "URL для webhook",
+    "События для уведомлений",
+    "Новые уязвимости",
+    "Обновления задач",
+    "Новые отчеты",
+    "Сохранить webhook"
+  ],
+  "/Users/adiom/Canfly/Developers/components/settings/notification-settings.tsx": [
+    "Настройки уведомлений",
+    "Настройте способы получения уведомлений",
+    "Способы уведомлений",
+    "Только по электронной почте",
+    "Только push-уведомления",
+    "Email и push-уведомления",
+    "Отключить все уведомления",
+    "Типы уведомлений",
+    "Новые уязвимости",
+    "Уведомления о новых обнаруженных уязвимостях",
+    "Обновления задач",
+    "Уведомления об изменениях в назначенных задачах",
+    "Завершение проектов",
+    "Уведомления о завершении проектов",
+    "Отчеты",
+    "Уведомления о новых доступных отчетах",
+    "Маркетинговые сообщения",
+    "Новости, обновления и предложения"
+  ],
+  "/Users/adiom/Canfly/Developers/components/settings/password-settings.tsx": [
+    "Изменение пароля",
+    "Обновите ваш пароль для повышения безопасности",
+    "Текущий пароль",
+    "Новый пароль",
+    "Подтверждение пароля",
+    "Двухфакторная аутентификация",
+    "Повысьте безопасность вашей учетной записи с помощью 2FA",
+    "Аутентификация по SMS",
+    "Получайте коды подтверждения по SMS",
+    "Приложение-аутентификатор",
+    "Используйте Google Authenticator или другое приложение",
+    "Резервные коды",
+    "Создайте резервные коды для экстренного доступа",
+    "Создать коды"
+  ],
+  "/Users/adiom/Canfly/Developers/components/settings/security-settings.tsx": [
+    "Изменение пароля",
+    "Обновите ваш пароль для повышения безопасности",
+    "Текущий пароль",
+    "Новый пароль",
+    "Подтверждение пароля",
+    "Двухфакторная аутентификация",
+    "Повысьте безопасность вашей учетной записи с помощью 2FA",
+    "Аутентификация по SMS",
+    "Получайте коды подтверждения по SMS",
+    "Приложение-аутентификатор",
+    "Используйте Google Authenticator или другое приложение",
+    "Резервные коды",
+    "Создайте резервные коды для экстренного доступа",
+    "Создать коды",
+    "Сеансы",
+    "Управление активными сеансами и устройствами",
+    "Текущий сеанс",
+    "Chrome на Windows • Москва, Россия • Сейчас",
+    "Текущий",
+    "Мобильное устройство",
+    "Safari на iPhone • Санкт-Петербург, Россия • 2 дня назад",
+    "Завершить",
+    "Завершить все другие сеансы"
+  ],
+  "/Users/adiom/Canfly/Developers/components/settings/sessions-list-client.tsx": [
+    "Сеансы",
+    "Управление активными сеансами и устройствами",
+    "1 && (",
+    "Завершить все другие сеансы"
+  ],
+  "/Users/adiom/Canfly/Developers/components/settings/user-settings.tsx": [
+    "Профиль пользователя",
+    "Управление информацией вашего профиля",
+    "Изменить фото",
+    "Имя",
+    "Email",
+    "Роль",
+    "Телефон",
+    "О себе",
+    "user.name} /"
+  ],
+  "/Users/adiom/Canfly/Developers/components/sidebar.tsx": [
+    "Разработка"
+  ],
+  "/Users/adiom/Canfly/Developers/components/task-edit-form.tsx": [
+    "Название",
+    "Описание",
+    "Статус",
+    "В ожидании",
+    "В процессе",
+    "Завершено",
+    "Отменено",
+    "Приоритет",
+    "Низкий",
+    "Средний",
+    "Высокий",
+    "Критический",
+    "Срок выполнения",
+    "Проект",
+    "Назначено",
+    "Отмена"
+  ],
+  "/Users/adiom/Canfly/Developers/components/task-form.tsx": [
+    "Project",
+    "Task Title",
+    "Description",
+    "Assigned To",
+    "Due Date",
+    "Pick a date",
+    "Status",
+    "Pending",
+    "In Progress",
+    "Completed",
+    "Blocked",
+    "Cancel",
+    "Save Task"
+  ],
+  "/Users/adiom/Canfly/Developers/components/team/delete-team-member.tsx": [
+    "Удалить сотрудника",
+    "Подтвердите удаление",
+    "Вы уверены, что хотите удалить сотрудника {userName}? Это действие нельзя отменить.",
+    "Отмена"
+  ],
+  "/Users/adiom/Canfly/Developers/components/team/team-invite-form.tsx": [
+    "Имя",
+    "Email",
+    "Роль",
+    "Администратор",
+    "Менеджер",
+    "Аналитик",
+    "Тестировщик",
+    "Сообщение (необязательно)",
+    "Отмена"
+  ],
+  "/Users/adiom/Canfly/Developers/components/team/team-member-edit-form.tsx": [
+    "Имя",
+    "Email",
+    "Телефон",
+    "Роль",
+    "Администратор",
+    "Менеджер",
+    "Аналитик",
+    "Тестировщик",
+    "Отмена"
+  ],
+  "/Users/adiom/Canfly/Developers/components/ui/alert.tsx": [
+    "& VariantProps"
+  ],
+  "/Users/adiom/Canfly/Developers/components/ui/breadcrumb.tsx": [
+    "More"
+  ],
+  "/Users/adiom/Canfly/Developers/components/ui/carousel.tsx": [
+    "Previous slide",
+    "Next slide"
+  ],
+  "/Users/adiom/Canfly/Developers/components/ui/dialog.tsx": [
+    "Close"
+  ],
+  "/Users/adiom/Canfly/Developers/components/ui/form.tsx": [
+    "= FieldPath"
+  ],
+  "/Users/adiom/Canfly/Developers/components/ui/pagination.tsx": [
+    "Previous",
+    "Next",
+    "More pages"
+  ],
+  "/Users/adiom/Canfly/Developers/components/ui/sheet.tsx": [
+    "Close"
+  ],
+  "/Users/adiom/Canfly/Developers/components/ui/sidebar.tsx": [
+    "Toggle Sidebar",
+    "} & VariantProps"
+  ],
+  "/Users/adiom/Canfly/Developers/components/ui/toast.tsx": [
+    "type ToastActionElement = React.ReactElement"
+  ],
+  "/Users/adiom/Canfly/Developers/components/upcoming-tasks.tsx": [
+    "Upcoming Tasks",
+    "Add Task",
+    "0 ? (",
+    "Due: {formatDate(task.due_date)}",
+    "View",
+    "No upcoming tasks",
+    "Add Your First Task"
+  ],
+  "/Users/adiom/Canfly/Developers/components/vulnerability-edit-form.tsx": [
+    "Оценка",
+    "Название уязвимости",
+    "Серьезность",
+    "Низкий",
+    "Средний",
+    "Высокий",
+    "Критический",
+    "Статус",
+    "Открыта",
+    "В работе",
+    "Смягчена",
+    "Закрыта",
+    "Описание",
+    "Рекомендации по устранению",
+    "Отмена",
+    "Сохранить изменения"
+  ]
+}

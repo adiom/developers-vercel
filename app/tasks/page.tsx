@@ -1,15 +1,32 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
 import { PlusCircle, Search } from "lucide-react"
 import Link from "next/link"
 import { sql } from "@/lib/db"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { StatusBadge } from "@/components/status-badge"
+import { EmptyState } from "@/components/empty-state"
+import { formatDisplayDate } from "@/lib/date"
+
+interface Task {
+  id: number
+  title: string
+  project_name: string
+  status: string
+  due_date: string | null
+  assigned_to_name: string | null
+}
 
 export default async function TasksPage() {
-  // Fetch tasks from the database with project and assignee names
-  const tasks = await sql`
-    SELECT t.*, p.name as project_name, u.name as assigned_to_name 
+  // Fetch only required columns (aliasing t.name as title for UI consistency)
+  const tasks = await sql<Task[]>`
+    SELECT 
+      t.id,
+      t.title AS title,
+      t.status,
+      t.due_date,
+      p.name AS project_name,
+      u.name AS assigned_to_name
     FROM tasks t
     JOIN projects p ON t.project_id = p.id
     LEFT JOIN users u ON t.assigned_to = u.id
@@ -20,25 +37,7 @@ export default async function TasksPage() {
   const inProgressTasks = tasks.filter((task) => task.status.toLowerCase() === "in progress")
   const completedTasks = tasks.filter((task) => task.status.toLowerCase() === "completed")
 
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "completed":
-        return "bg-green-500/10 text-green-500 hover:bg-green-500/20"
-      case "in progress":
-        return "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20"
-      case "pending":
-        return "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20"
-      case "blocked":
-        return "bg-red-500/10 text-red-500 hover:bg-red-500/20"
-      default:
-        return "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20"
-    }
-  }
-
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return "Not set"
-    return new Date(dateString).toLocaleDateString()
-  }
+  const formatDate = (dateString: string | null) => formatDisplayDate(dateString)
 
   return (
     <div className="space-y-6">
@@ -68,74 +67,66 @@ export default async function TasksPage() {
         </TabsList>
 
         <TabsContent value="pending" className="pt-4">
-          <TaskList tasks={pendingTasks} getStatusColor={getStatusColor} formatDate={formatDate} />
+          <TaskList tasks={pendingTasks} formatDate={formatDate} />
         </TabsContent>
 
         <TabsContent value="in-progress" className="pt-4">
-          <TaskList tasks={inProgressTasks} getStatusColor={getStatusColor} formatDate={formatDate} />
+          <TaskList tasks={inProgressTasks} formatDate={formatDate} />
         </TabsContent>
 
         <TabsContent value="completed" className="pt-4">
-          <TaskList tasks={completedTasks} getStatusColor={getStatusColor} formatDate={formatDate} />
+          <TaskList tasks={completedTasks} formatDate={formatDate} />
         </TabsContent>
 
         <TabsContent value="all" className="pt-4">
-          <TaskList tasks={tasks} getStatusColor={getStatusColor} formatDate={formatDate} />
+          <TaskList tasks={tasks} formatDate={formatDate} />
         </TabsContent>
       </Tabs>
     </div>
   )
 }
 
-function TaskList({ tasks, getStatusColor, formatDate }) {
+function TaskList({ tasks, formatDate }: { tasks: Task[]; formatDate: (d: string | null) => string }) {
   if (tasks.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-        <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-          <h3 className="mt-4 text-lg font-semibold">No tasks found</h3>
-          <p className="mb-4 mt-2 text-sm text-muted-foreground">There are no tasks in this category.</p>
-          <Button asChild>
-            <Link href="/tasks/new">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add Task
-            </Link>
-          </Button>
-        </div>
-      </div>
-    )
+    return <EmptyState title="No tasks found" description="There are no tasks in this category." actionHref="/tasks/new" actionLabel="Add Task" />
   }
 
   return (
-    <div className="rounded-md border">
-      <div className="grid grid-cols-12 gap-4 p-4 font-medium border-b">
-        <div className="col-span-4">Title</div>
-        <div className="col-span-3">Project</div>
-        <div className="col-span-2">Status</div>
-        <div className="col-span-2">Due Date</div>
-        <div className="col-span-1"></div>
-      </div>
-      {tasks.map((task) => (
-        <div key={task.id} className="grid grid-cols-12 gap-4 p-4 border-b last:border-0 items-center">
-          <div className="col-span-4">
-            <div className="font-medium">{task.title}</div>
-            <div className="text-sm text-muted-foreground">
-              {task.assigned_to_name ? `Assigned to: ${task.assigned_to_name}` : "Unassigned"}
-            </div>
-          </div>
-          <div className="col-span-3">{task.project_name}</div>
-          <div className="col-span-2">
-            <Badge className={getStatusColor(task.status)} variant="outline">
-              {task.status}
-            </Badge>
-          </div>
-          <div className="col-span-2">{formatDate(task.due_date)}</div>
-          <div className="col-span-1 text-right">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href={`/tasks/${task.id}`}>View</Link>
-            </Button>
-          </div>
-        </div>
-      ))}
+    <div className="rounded-md border overflow-hidden">
+      <table className="w-full text-sm">
+        <thead className="bg-muted/40 text-left">
+          <tr className="border-b">
+            <th className="p-3 font-medium w-[30%]">Title</th>
+            <th className="p-3 font-medium w-[25%]">Project</th>
+            <th className="p-3 font-medium w-[15%]">Status</th>
+            <th className="p-3 font-medium w-[20%]">Due Date</th>
+            <th className="p-3 font-medium w-[10%] text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tasks.map((task) => {
+            const overdue = task.due_date ? new Date(task.due_date) < new Date() && task.status.toLowerCase() !== "completed" : false
+            return (
+              <tr key={task.id} className={overdue ? "bg-red-50/40 dark:bg-red-950/30" : undefined}>
+                <td className="p-3 align-top">
+                  <div className="font-medium">{task.title}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {task.assigned_to_name ? `Assigned to: ${task.assigned_to_name}` : "Unassigned"}
+                  </div>
+                </td>
+                <td className="p-3 align-top">{task.project_name}</td>
+                <td className="p-3 align-top"><StatusBadge status={task.status} /></td>
+                <td className="p-3 align-top">{formatDate(task.due_date)}</td>
+                <td className="p-3 align-top text-right">
+                  <Button variant="ghost" size="sm" asChild aria-label={`View task ${task.title}`}>
+                    <Link href={`/tasks/${task.id}`}>View</Link>
+                  </Button>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
     </div>
   )
 }

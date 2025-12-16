@@ -18,10 +18,10 @@ import { cn } from "@/lib/utils"
 
 const taskFormSchema = z.object({
   project_id: z.coerce.number({
-    required_error: "Please select a project.",
+    required_error: "Пожалуйста, выберите проект.",
   }),
   title: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
+    message: "Название должно содержать минимум 2 символа.",
   }),
   description: z.string().optional(),
   assigned_to: z.coerce.number().optional(),
@@ -34,14 +34,16 @@ type TaskFormValues = z.infer<typeof taskFormSchema>
 interface TaskFormProps {
   projects: { id: number; name: string }[]
   users: { id: number; name: string }[]
+  defaultProjectId?: number
 }
 
-export function TaskForm({ projects, users }: TaskFormProps) {
+export function TaskForm({ projects, users, defaultProjectId }: TaskFormProps) {
   const router = useRouter()
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
+      project_id: defaultProjectId,
       title: "",
       description: "",
       status: "pending",
@@ -76,14 +78,14 @@ export function TaskForm({ projects, users }: TaskFormProps) {
           name="project_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Project</FormLabel>
+              <FormLabel>Проект</FormLabel>
               <Select
                 onValueChange={(value) => field.onChange(Number.parseInt(value))}
                 defaultValue={field.value?.toString()}
               >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a project" />
+                    <SelectValue placeholder="Выберите проект" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -104,9 +106,9 @@ export function TaskForm({ projects, users }: TaskFormProps) {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Task Title</FormLabel>
+              <FormLabel>Название задачи</FormLabel>
               <FormControl>
-                <Input placeholder="Review security logs" {...field} />
+                <Input placeholder="Проверка логов безопасности" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -118,9 +120,9 @@ export function TaskForm({ projects, users }: TaskFormProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Описание</FormLabel>
               <FormControl>
-                <Textarea placeholder="Detailed description of the task..." {...field} />
+                <Textarea placeholder="Подробное описание задачи..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -133,14 +135,14 @@ export function TaskForm({ projects, users }: TaskFormProps) {
             name="assigned_to"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Assigned To</FormLabel>
+                <FormLabel>Назначено</FormLabel>
                 <Select
                   onValueChange={(value) => field.onChange(value ? Number.parseInt(value) : undefined)}
                   defaultValue={field.value?.toString()}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a team member" />
+                      <SelectValue placeholder="Выберите исполнителя" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -161,7 +163,7 @@ export function TaskForm({ projects, users }: TaskFormProps) {
             name="due_date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Due Date</FormLabel>
+                <FormLabel>Срок выполнения</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -169,7 +171,7 @@ export function TaskForm({ projects, users }: TaskFormProps) {
                         variant={"outline"}
                         className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
                       >
-                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                        {field.value ? format(field.value, "PPP") : <span>Выберите дату</span>}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
@@ -189,18 +191,18 @@ export function TaskForm({ projects, users }: TaskFormProps) {
           name="status"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Status</FormLabel>
+              <FormLabel>Статус</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a status" />
+                    <SelectValue placeholder="Выберите статус" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="in progress">In Progress</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="blocked">Blocked</SelectItem>
+                  <SelectItem value="pending">В ожидании</SelectItem>
+                  <SelectItem value="in_progress">В процессе</SelectItem>
+                  <SelectItem value="completed">Завершено</SelectItem>
+                  <SelectItem value="blocked">Заблокировано</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -210,9 +212,9 @@ export function TaskForm({ projects, users }: TaskFormProps) {
 
         <div className="flex justify-end gap-4">
           <Button type="button" variant="outline" onClick={() => router.back()}>
-            Cancel
+            Отмена
           </Button>
-          <Button type="submit">Save Task</Button>
+          <Button type="submit">Сохранить задачу</Button>
         </div>
       </form>
     </Form>

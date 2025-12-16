@@ -16,6 +16,10 @@ export default async function NewTaskPage({ searchParams }: NewTaskPageProps) {
   // Fetch users for the assignee dropdown
   const users = await sql`SELECT id, name FROM users ORDER BY name ASC`
 
+  // Get default project ID from URL params
+  const resolvedSearchParams = await searchParams
+  const defaultProjectId = resolvedSearchParams.project ? parseInt(resolvedSearchParams.project) : undefined
+
   // If no projects exist, redirect to create a project first
   if (projects.length === 0) {
     redirect("/projects/new?redirect=tasks/new")
@@ -24,17 +28,17 @@ export default async function NewTaskPage({ searchParams }: NewTaskPageProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Add New Task</h1>
-        <p className="text-muted-foreground">Create a new task for a security project</p>
+        <h1 className="text-3xl font-bold">Создать новую задачу</h1>
+        <p className="text-muted-foreground">Создайте новую задачу для проекта безопасности</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Task Information</CardTitle>
-          <CardDescription>Enter the details of the new task</CardDescription>
+          <CardTitle>Информация о задаче</CardTitle>
+          <CardDescription>Введите детали новой задачи</CardDescription>
         </CardHeader>
         <CardContent>
-          <TaskForm projects={projects} users={users} />
+          <TaskForm projects={projects} users={users} defaultProjectId={defaultProjectId} />
         </CardContent>
       </Card>
     </div>
