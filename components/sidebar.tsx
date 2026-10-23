@@ -13,70 +13,72 @@ import {
   Users,
   Folder,
   CheckSquare,
+  MessageSquareText,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
-export function Sidebar() {
+export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
   const pathname = usePathname()
 
   const routes = [
     {
       name: "Центр управления",
-      path: "/",
+      path: "/workspace",
       icon: Home,
     },
     {
       name: "Клиенты",
-      path: "/clients",
+      path: "/workspace/clients",
       icon: Building2,
     },
     {
       name: "Проекты",
-      path: "/projects",
+      path: "/workspace/projects",
       icon: Folder,
     },
     {
       name: "Оценки безопасности",
-      path: "/assessments",
+      path: "/workspace/assessments",
       icon: ShieldAlert,
     },
     {
       name: "Уязвимости",
-      path: "/vulnerabilities",
+      path: "/workspace/vulnerabilities",
       icon: Lock,
     },
     {
       name: "Задачи",
-      path: "/tasks",
+      path: "/workspace/tasks",
       icon: CheckSquare,
     },
     {
       name: "Отчеты",
-      path: "/reports",
+      path: "/workspace/reports",
       icon: FileText,
     },
     {
       name: "Команда",
-      path: "/team",
+      path: "/workspace/team",
       icon: Users,
     },
     {
       name: "Аналитика",
-      path: "/analytics",
+      path: "/workspace/analytics",
       icon: BarChart3,
     },
     {
       name: "Настройки",
-      path: "/settings",
+      path: "/workspace/settings",
       icon: Settings,
     },
   ]
+  if (isAdmin) routes.splice(2, 0, { name: "Заявки с сайта", path: "/workspace/leads", icon: MessageSquareText })
 
   return (
     <div className="hidden border-r bg-background md:block w-64">
       <div className="flex h-16 items-center border-b px-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
+        <Link href="/workspace" className="flex items-center gap-2 font-semibold">
           <ShieldAlert className="h-6 w-6" />
           <span>Разработка</span>
         </Link>

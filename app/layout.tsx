@@ -1,18 +1,21 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { headers } from "next/headers"
+import { redirect } from "next/navigation"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Sidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
 import { getCurrentUser } from "@/lib/auth"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin", "cyrillic"] })
 
 export const metadata: Metadata = {
-  title: "Портал разработки dev.canfly.org",
-  description: "dev.canfly.org",
-    generator: 'v0.dev'
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://dev.canfly.org"),
+  title: { default: "Canfly — разработка AI-агентов и цифровых продуктов", template: "%s | Canfly" },
+  description: "Портал разработки Canfly: платформа, AI-агенты и проекты для бизнеса.",
+  applicationName: "Canfly",
 }
 
 type User = {
@@ -27,19 +30,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const user = await getCurrentUser() as User
+  const requestHeaders = await headers()
+  const isWorkspace = requestHeaders.get("x-canfly-workspace") === "1"
+  const user = isWorkspace ? await getCurrentUser() as User : null
+  if (isWorkspace && !user) redirect("/workspace/login")
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ru" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <div className="flex h-screen overflow-hidden">
-            {user && <Sidebar />}
-            <div className="flex flex-col flex-1 overflow-hidden">
-              <Header user={user} />
-              <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-muted/40">{children}</main>
-            </div>
-          </div>
+          {isWorkspace ? <div className="flex h-screen overflow-hidden"><Sidebar isAdmin={user?.role === "admin"} /><div className="flex min-w-0 flex-1 flex-col overflow-hidden"><Header user={user} /><main className="flex-1 overflow-y-auto bg-muted/40 p-4 md:p-6">{children}</main></div></div> : children}
         </ThemeProvider>
       </body>
     </html>

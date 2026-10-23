@@ -40,7 +40,7 @@ export function RegisterForm() {
         if (result.redirectTo) {
           router.push(result.redirectTo)
         } else {
-          router.push("/")
+          router.push("/workspace")
         }
       } else {
         setError(result.error || "An error occurred during registration")
@@ -89,7 +89,7 @@ export function RegisterForm() {
       <CardFooter className="flex flex-col">
         <div className="text-sm text-center text-muted-foreground mt-2">
           Already have an account?{" "}
-          <Link href="/auth/login" className="text-primary hover:underline">
+          <Link href="/workspace/login" className="text-primary hover:underline">
             Login
           </Link>
         </div>

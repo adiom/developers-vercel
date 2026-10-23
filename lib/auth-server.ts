@@ -36,7 +36,7 @@ export async function requireAuth() {
   const user = await getCurrentUser()
   
   if (!user) {
-    redirect("/auth/login")
+    redirect("/workspace/login")
   }
   
   return user
@@ -87,4 +87,4 @@ export async function getSessions(userId: number) {
     AND expires_at > NOW()
     ORDER BY created_at DESC
   `
-} 
+}

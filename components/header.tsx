@@ -41,7 +41,7 @@ export function Header({ user }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-4 md:px-6">
         <div className="flex items-center gap-2 font-semibold">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/workspace" className="flex items-center gap-2">
             <span className="hidden md:inline-block">dev.canfly.org</span>
           </Link>
         </div>
@@ -81,7 +81,7 @@ export function Header({ user }: HeaderProps) {
               </DropdownMenu>
             </>
           ) : (
-            <Button variant="ghost" size="sm" onClick={() => router.push("/auth/login")}>
+            <Button variant="ghost" size="sm" onClick={() => router.push("/workspace/login")}>
               <LogIn className="mr-2 h-4 w-4" />
               Log in
             </Button>

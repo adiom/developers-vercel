@@ -6,7 +6,7 @@ export default async function RegisterPage() {
   // Redirect if already logged in
   const user = await getCurrentUser()
   if (user) {
-    redirect("/")
+    redirect("/workspace")
   }
 
   return (

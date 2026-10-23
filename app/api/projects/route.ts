@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { sql } from "@/lib/db"
 import { z } from "zod"
+import { getCurrentUser } from "@/lib/auth"
 
 // Schema for project creation
 const createProjectSchema = z.object({
@@ -14,14 +15,14 @@ const createProjectSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // Get user ID from middleware
-    const userId = request.headers.get("x-user-id")
-    if (!userId) {
+    const user = await getCurrentUser()
+    if (!user) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       )
     }
+    const userId = String(user.user_id)
 
     // Parse and validate request body
     const body = await request.json()
@@ -81,4 +82,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-} 
+}

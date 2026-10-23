@@ -1,11 +1,28 @@
 import { neon } from "@neondatabase/serverless"
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is not set")
+let client: ReturnType<typeof neon> | undefined
+function getClient() {
+  const connectionString = process.env.DATABASE_URL
+  if (!connectionString) throw new Error("DATABASE_URL environment variable is not set")
+  client ??= neon(connectionString)
+  return client
 }
 
-// Create a SQL client with the connection string from environment variables
-const sql = neon(process.env.DATABASE_URL)
+// Keep public routes importable during builds; connect only when a query runs.
+const unconfiguredClient = neon("postgres://placeholder:placeholder@localhost/canfly")
+const sql = new Proxy(unconfiguredClient, {
+  apply(_target, _thisArg, args) {
+    const activeClient = getClient()
+    return Reflect.apply(activeClient, activeClient, args)
+  },
+  get(_target, property) {
+    const activeClient = getClient()
+    const value = Reflect.get(activeClient, property, activeClient)
+    return typeof value === "function" ? value.bind(activeClient) : value
+  },
+})
+
+export const isDatabaseConfigured = () => Boolean(process.env.DATABASE_URL)
 
 // Initialize database tables
 async function initDatabase() {

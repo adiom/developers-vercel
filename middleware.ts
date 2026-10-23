@@ -11,18 +11,12 @@ const CORS_HEADERS = {
   "Access-Control-Max-Age": "86400"
 } as const
 
-const PUBLIC_ROUTES: PublicRoute[] = [
-  "/auth/login",
-  "/auth/register",
-  "/auth/forgot-password"
-]
+const PUBLIC_ROUTES: PublicRoute[] = ["/", "/platform", "/services", "/agents", "/privacy", "/robots.txt", "/sitemap.xml", "/auth/login", "/auth/register"]
 
 const isApiRoute = (pathname: string): boolean => pathname.startsWith("/api")
-const isPublicRoute = (pathname: string): boolean => 
-  PUBLIC_ROUTES.some(route => pathname.startsWith(route))
+const isPublicRoute = (pathname: string): boolean =>
+  PUBLIC_ROUTES.includes(pathname as PublicRoute) || pathname.startsWith("/api/chat") || pathname.startsWith("/api/leads") || /^\/agents\/[a-z-]+$/.test(pathname)
 const isNextInternal = (pathname: string): boolean => pathname.startsWith("/_next")
-const isProjectViewRoute = (pathname: string): boolean => 
-  /^\/projects\/\d+$/.test(pathname)
 
 const createCorsResponse = (): NextResponseType => {
   const response = new NextResponse(null, { status: 200 })
@@ -49,28 +43,38 @@ export function middleware(request: NextRequest): NextResponseType {
     return response
   }
 
-  // Skip auth checks for public routes and Next.js internal routes
-  if (isPublicRoute(pathname) || isNextInternal(pathname)) {
-    // Redirect to home if user is already authenticated
-    if (sessionToken) {
-      return NextResponse.redirect(new URL("/", request.url))
+  if (isNextInternal(pathname) || isPublicRoute(pathname) || isApiRoute(pathname)) {
+    if ((pathname === "/auth/login" || pathname === "/auth/register") && !pathname.startsWith("/workspace")) {
+      return NextResponse.redirect(new URL(pathname.replace("/auth/", "/workspace/"), request.url))
     }
     return NextResponse.next()
   }
 
-  // Allow public access to project view pages for GET requests
-  if (isProjectViewRoute(pathname) && request.method === "GET") {
-    return NextResponse.next()
+  if (pathname === "/workspace/login" || pathname === "/workspace/register") {
+    const rewriteUrl = request.nextUrl.clone()
+    rewriteUrl.pathname = pathname.endsWith("/login") ? "/auth/login" : "/auth/register"
+    return NextResponse.rewrite(rewriteUrl)
   }
 
-  // Redirect to login if not authenticated
+  const workspacePath = pathname === "/workspace" || pathname.startsWith("/workspace/")
+  if (!workspacePath) {
+    const destination = new URL(`/workspace${pathname === "/" ? "" : pathname}`, request.url)
+    destination.search = request.nextUrl.search
+    return NextResponse.redirect(destination)
+  }
+
   if (!sessionToken) {
-    const loginUrl = new URL("/auth/login", request.url)
-    loginUrl.searchParams.set("callbackUrl", encodeURI(pathname))
+    const loginUrl = new URL("/workspace/login", request.url)
+    loginUrl.searchParams.set("callbackUrl", pathname)
     return NextResponse.redirect(loginUrl)
   }
 
-  return NextResponse.next()
+  const internalPath = pathname === "/workspace" || pathname === "/workspace/" ? "/dashboard" : pathname.replace(/^\/workspace/, "")
+  const rewriteUrl = request.nextUrl.clone()
+  rewriteUrl.pathname = internalPath || "/dashboard"
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set("x-canfly-workspace", "1")
+  return NextResponse.rewrite(rewriteUrl, { request: { headers: requestHeaders } })
 }
 
 // See "Matching Paths" below to learn more

@@ -39,7 +39,7 @@ export async function registerUser(formData: FormData) {
     revalidatePath("/")
 
     // Return success before redirect
-    return { success: true, redirectTo: "/" }
+    return { success: true, redirectTo: "/workspace" }
   } catch (error) {
     console.error("Registration error:", error)
     return { success: false, error: "An error occurred during registration" }
@@ -77,7 +77,7 @@ export async function loginUser(formData: FormData) {
     revalidatePath("/")
 
     // Return success before redirect
-    return { success: true, redirectTo: "/" }
+    return { success: true, redirectTo: "/workspace" }
   } catch (error) {
     console.error("Login error:", error)
     return { success: false, error: "An error occurred during login" }
@@ -88,7 +88,7 @@ export async function logoutUser() {
   try {
     clearAuthCookie()
     revalidatePath("/")
-    return { success: true, redirectTo: "/auth/login" }
+    return { success: true, redirectTo: "/workspace/login" }
   } catch (error) {
     console.error("Logout error:", error)
     return { success: false, error: "An error occurred during logout" }

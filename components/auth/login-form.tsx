@@ -31,7 +31,7 @@ export function LoginForm() {
         if (result.redirectTo) {
           router.push(result.redirectTo)
         } else {
-          router.push("/")
+          router.push("/workspace")
         }
       } else {
         setError(result.error || "An error occurred during login")
@@ -72,7 +72,7 @@ export function LoginForm() {
       <CardFooter className="flex flex-col">
         <div className="text-sm text-center text-muted-foreground mt-2">
           Нет аккаунта?{" "}
-          <Link href="/auth/register" className="text-primary hover:underline">
+          <Link href="/workspace/register" className="text-primary hover:underline">
             Зарегистрироваться
           </Link>
         </div>
